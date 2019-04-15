@@ -1,0 +1,13 @@
+.tableHeader {
+    background: #f1f1f1;
+    overflow: hidden;
+    width: 100%;
+}
+.tableHeader tr th {
+    border: 1px #ebeef5 solid;
+    box-sizing: border-box;
+}    
+.tableHeader table {
+    border-collapse:collapse;
+    table-layout: fixed;
+}

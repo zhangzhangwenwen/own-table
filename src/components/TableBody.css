@@ -1,0 +1,15 @@
+.tableBody {
+    overflow-x: auto;
+    width: 100%;
+}
+.tableBody tr td{
+  box-sizing: border-box;
+  border: 1px #ebeef5 solid;
+}
+.tableBody table {
+  border-collapse:collapse;
+  table-layout: fixed;
+}
+.is-center {
+  text-align: center;
+}
