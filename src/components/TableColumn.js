@@ -1,13 +1,14 @@
+// 获取table数据并对宽度做相关处理
 const getDefaultColumns = function (options) {
     const column = {}
     for (let name in options) {
       column[name] = options[name]
     }
     
-    if (!column.minWidth) {
+    if (!column.minWidth) { // 如果没有最小高度 设置默认值为80
       column.minWidth = 80;
     }
-  
+    // 猎德真实高度 = width存在吗 存在取改宽度 否则取最小高度
     column.realWidth = column.width === undefined ? column.minWidth : column.width;
     return column
   }

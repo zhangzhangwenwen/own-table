@@ -53,16 +53,16 @@ export default {
   computed: {
     bodyWidth() {
         const { bodyWidth, scrollY, gutterWidth } = this.layout
-        return bodyWidth ? bodyWidth - 8 + 'px' : ''
+        return bodyWidth ? bodyWidth - gutterWidth + 'px' : ''; // scrollY是否存在y轴方向的滚动条
       }
   },
   mounted () {
      // 滚动条滚动事件
-   const bodyScroll = document.querySelector('.tableBody')
-   const headerScroll = document.querySelector('.tableHeader')
-   bodyScroll.addEventListener('scroll', function () {
-     headerScroll.scrollLeft = bodyScroll.scrollLeft
-   })
+  //  const bodyScroll = document.querySelector('.tableBody')
+  //  const headerScroll = document.querySelector('.tableHeader')
+  //  bodyScroll.addEventListener('scroll', function () {
+  //    headerScroll.scrollLeft = bodyScroll.scrollLeft
+  //  })
    this.resizeState = {
       width: this.$el.offsetWidth,
       height: this.$el.offsetHeight
@@ -96,7 +96,6 @@ export default {
         const el = this.$el;
         // 整体table表格的宽高
         const { width: oldWidth, height: oldHeight } = this.resizeState;
-         
         const width = el.offsetWidth;
         if (oldWidth !== width) {
           shouldUpdateLayout = true;
@@ -129,18 +128,7 @@ export default {
    margin: 0;
    padding: 0
  }
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    background: none;
-  }
-  /*!*滚动条的轨道 内阴影+圆角*!*/
-  ::-webkit-scrollbar-track-piece {
-    background: none;
-  }
-  /*!*滚动条里面的滑块 内阴影+圆角*!*/
-  ::-webkit-scrollbar-thumb {
-    background-color: #8492A6;
-    border-radius: 1px;
-  }
+ table {
+    border-spacing: none;
+ }
 </style>

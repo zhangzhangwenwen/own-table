@@ -14,31 +14,31 @@
 import OwnTable from './OwnTable'
 import TableColumn from './TableColumn'
 export default {
-   data () {
-      return {
-        dataSource: [
-          {name: '张三', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asd', sex: '女', age: '13', fat: '40', getou: '182'},
-          {name: '张三asda', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '女', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '女', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '女', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
-          {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'}
-        ]
-      }
-   },
-   components: {
-     OwnTable,
-     TableColumn
-   }
+  data () {
+    return {
+      dataSource: [
+        {name: '张三', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asd', sex: '女', age: '13', fat: '40', getou: '182'},
+        {name: '张三asda', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '女', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '女', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '女', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'},
+        {name: '张三asdad', sex: '男', age: '13', fat: '40', getou: '182'}
+      ]
+    }
+  },
+  components: {
+    OwnTable,
+    TableColumn
+  }
 }
 </script>
 

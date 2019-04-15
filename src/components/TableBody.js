@@ -10,7 +10,7 @@ export default {
     })
     const dataSource = this.$parent.dataSource
     return (
-        <table cellspacing="0" cellpadding="0">
+        <table cellspacing="0" cellpadding="0" border="0">
           <colgroup>
             {
               this._l(columns, column =>

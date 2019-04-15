@@ -4,10 +4,11 @@
 }
 .tableBody tr td{
   box-sizing: border-box;
-  border: 1px #ebeef5 solid;
+  border-right: 1px #ebeef5 solid;
+  border-bottom: 1px #ebeef5 solid;
 }
 .tableBody table {
-  border-collapse:collapse;
+  border-collapse:separate;
   table-layout: fixed;
 }
 .is-center {

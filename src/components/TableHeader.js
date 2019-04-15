@@ -6,15 +6,15 @@ export default {
   render () {
     const columns = this.$parent.store.states.columns
     return (
-       <table>
+       <table cellspacing="0" cellpadding="0" border="0">
         <colgroup>
           {
             this._l(columns, column =>
               <col name={ column.id } />
             )
           }
-          {
-            <col width="8"/>
+           {
+            this.hasGutter ? <col name="gutter" /> : ''
           }
         </colgroup>
           <thead>
@@ -33,7 +33,7 @@ export default {
                 )
               }
               {
-                <th></th>
+                  this.hasGutter ? <th class="gutter"></th> : ''
               }
             </tr>
           </thead>
@@ -56,7 +56,12 @@ export default {
       })
     }
   },
+  mounted () {
+  },
   computed: {
+    hasGutter() {
+      return this.tableLayout.gutterWidth
+    },
     table() {
       return this.$parent
     }
