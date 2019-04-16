@@ -1,43 +1,40 @@
 // import './TableHeader.css'
-import LayoutObserver from './layoutObserver';
+import LayoutObserver from './layoutObserver'
 export default {
   name: 'TableHeader',
-  mixins: [LayoutObserver],  
+  mixins: [LayoutObserver],
   render () {
     const columns = this.$parent.store.states.columns
     return (
-       <table cellspacing="0" cellpadding="0" border="0">
+      <table cellspacing="0" cellpadding="0" border="0">
         <colgroup>
           {
             this._l(columns, column =>
               <col name={ column.id } />
             )
           }
-           {
+          {
             this.hasGutter ? <col name="gutter" /> : ''
           }
         </colgroup>
-          <thead>
-            <tr class='theadStyle'>
-              {
-                this._l(columns, (column, index) =>
-                  <th class={'theadTd'}>
-                    { column.label }
-                    { column.sortable
-                        ? <span>
-                          <i on-click={() => this.sortUp(column)} class={'triangle_up'} />
-                          <i on-click={() => this.sortDown(column)} class={'triangle_down'} />
-                        </span> : ''
-                    }
-                  </th>
-                )
-              }
-              {
-                  this.hasGutter ? <th class="gutter"></th> : ''
-              }
-            </tr>
-          </thead>
-        </table>
+        <thead>
+          <tr class='theadStyle'>
+            {
+              this._l(columns, (column, index) =>
+                <th class={'theadTd'}>
+                  { column.label }
+                  { column.sortable ? <span><i on-click={() => this.sortUp(column)} class={'triangle_up'} />
+                    <i on-click={() => this.sortDown(column)} class={'triangle_down'} /></span> : ''
+                  }
+                </th>
+              )
+            }
+            {
+              this.hasGutter ? <th class="gutter"></th> : ''
+            }
+          </tr>
+        </thead>
+      </table>
     )
   },
   methods: {

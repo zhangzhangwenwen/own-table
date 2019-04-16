@@ -24,7 +24,7 @@ import TableLayout from './TableLayout'
 import TableHeader from './TableHeader'
 import TableColumn from './TableColumn'
 import TableBody from './TableBody'
-import { addResizeListener, removeResizeListener } from './utils/resize-event';
+import { addResizeListener, removeResizeListener } from './utils/resize-event'
 export default {
   name: 'OwnTable',
   props: {
@@ -51,26 +51,26 @@ export default {
     TableBody
   },
   computed: {
-    bodyWidth() {
-        const { bodyWidth, scrollY, gutterWidth } = this.layout
-        return bodyWidth ? bodyWidth - gutterWidth + 'px' : ''; // scrollY是否存在y轴方向的滚动条
-      }
+    bodyWidth () {
+      const { bodyWidth, scrollY, gutterWidth } = this.layout
+      return bodyWidth ? bodyWidth - gutterWidth + 'px' : '' // scrollY是否存在y轴方向的滚动条
+    }
   },
   mounted () {
-     // 滚动条滚动事件
+  // 滚动条滚动事件
   //  const bodyScroll = document.querySelector('.tableBody')
   //  const headerScroll = document.querySelector('.tableHeader')
   //  bodyScroll.addEventListener('scroll', function () {
   //    headerScroll.scrollLeft = bodyScroll.scrollLeft
   //  })
-   this.resizeState = {
+    this.resizeState = {
       width: this.$el.offsetWidth,
       height: this.$el.offsetHeight
-   }
-   this.doLayout() 
-   this.bindEvents()
+    }
+    this.doLayout()
+    this.bindEvents()
 
-   this.$ready = true
+    this.$ready = true
   },
   data () {
     const store = new TableStore(this)
@@ -87,34 +87,34 @@ export default {
   methods: {
     bindEvents () {
       if (this.fit) {
-         addResizeListener(this.$el, this.resizeListener);
+        addResizeListener(this.$el, this.resizeListener)
       }
     },
     resizeListener () {
-       if (!this.$ready) return;
-        let shouldUpdateLayout = false;
-        const el = this.$el;
-        // 整体table表格的宽高
-        const { width: oldWidth, height: oldHeight } = this.resizeState;
-        const width = el.offsetWidth;
-        if (oldWidth !== width) {
-          shouldUpdateLayout = true;
-        }
+      if (!this.$ready) return
+      let shouldUpdateLayout = false
+      const el = this.$el
+      // 整体table表格的宽高
+      const { width: oldWidth, height: oldHeight } = this.resizeState
+      const width = el.offsetWidth
+      if (oldWidth !== width) {
+        shouldUpdateLayout = true
+      }
 
-        const height = el.offsetHeight;
-        if ((this.height || this.shouldUpdateHeight) && oldHeight !== height) {
-          shouldUpdateLayout = true;
-        }
+      const height = el.offsetHeight
+      if ((this.height || this.shouldUpdateHeight) && oldHeight !== height) {
+        shouldUpdateLayout = true
+      }
 
-        if (shouldUpdateLayout) {
-          this.resizeState.width = width;
-          this.resizeState.height = height;
-          this.doLayout();
-        }
+      if (shouldUpdateLayout) {
+        this.resizeState.width = width
+        this.resizeState.height = height
+        this.doLayout()
+      }
     },
     doLayout () {
-       this.layout.setHeight(this.height)
-       this.layout.updateColumnsWidth();
+      this.layout.setHeight(this.height)
+      this.layout.updateColumnsWidth()
     }
   }
 }
