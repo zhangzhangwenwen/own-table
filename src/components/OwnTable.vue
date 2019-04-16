@@ -1,18 +1,30 @@
 <template>
   <div class="tableStyle" cellspacing="0" cellpadding="0" ref="table">
-  <div class='tableStyle tableHeader'>
-     <table-header
-     :style="{
-          width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''
-        }"></table-header>
-  </div>
-  <slot></slot>
-  <div class="tableBody">
-      <table-body
-      :style="{
-           width: bodyWidth
-        }"></table-body>
-  </div>
+
+    <!-- 表格头部 -->
+    <div class="tableHeader" ref="headerWrapper">
+      <table-header :style="{width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''}">
+      </table-header>
+    </div>
+
+    <slot></slot>
+
+    <!-- 表格主体 -->
+    <div  class="tableBody" ref="bodyWrapper" :style="[bodyHeight]">
+      <table-body :style="{ width: bodyWidth }">
+      </table-body>
+      <div v-if="!dataSource || dataSource.length === 0"
+          class="el-table__empty-block"
+          ref="emptyBlock"
+          :style="{
+            width: bodyWidth
+          }">
+          <span class="el-table__empty-text">
+            <slot name="empty">{{ emptyText || t('el.table.emptyText') }}</slot>
+          </span>
+        </div>
+    </div>
+
   </div>
 </template>
 
@@ -38,11 +50,24 @@ export default {
       type: Boolean,
       default: true
     },
-    height: [String, Number]
+    height: [String, Number],
+    maxHeight: [String, Number]
   },
   watch: {
     dataSource (oldVal, val) {
       this.dataSource = val
+    },
+    height: {
+      immediate: true,
+      handler(value) {
+        this.layout.setHeight(value);
+      }
+    },
+    maxHeight: {
+      immediate: true,
+      handler(value) {
+        this.layout.setMaxHeight(value);
+      }
     }
   },
   components: {
@@ -51,18 +76,31 @@ export default {
     TableBody
   },
   computed: {
+    // 表格主体的高度
+    bodyHeight() {
+        if (this.height) {
+          return {
+            height: this.layout.bodyHeight ? this.layout.bodyHeight + 'px' : ''
+          }
+        } else if (this.maxHeight) {
+           return {
+            'max-height': (this.maxHeight - this.layout.headerHeight) + 'px'
+          }
+        }
+        return {}
+    },
+    bodyWrapper() {
+      return this.$refs.bodyWrapper // 表格主体
+    },
     bodyWidth () {
       const { bodyWidth, scrollY, gutterWidth } = this.layout
-      return bodyWidth ? bodyWidth - gutterWidth + 'px' : '' // scrollY是否存在y轴方向的滚动条
+      return bodyWidth ? bodyWidth - (scrollY ? gutterWidth : 0) + 'px' : '';
+    },
+    shouldUpdateHeight() {
+      return this.height || this.maxHeight
     }
   },
   mounted () {
-  // 滚动条滚动事件
-  //  const bodyScroll = document.querySelector('.tableBody')
-  //  const headerScroll = document.querySelector('.tableHeader')
-  //  bodyScroll.addEventListener('scroll', function () {
-  //    headerScroll.scrollLeft = bodyScroll.scrollLeft
-  //  })
     this.resizeState = {
       width: this.$el.offsetWidth,
       height: this.$el.offsetHeight
@@ -81,11 +119,29 @@ export default {
       resizeState: {
         width: null,
         height: null
-      }
+      },
+       scrollPosition: 'left' // 滚动条所处位置
     }
   },
   methods: {
     bindEvents () {
+      // 表头随着表的主体滚动
+      const { headerWrapper } = this.$refs
+      const refs = this.$refs
+      let self = this
+      this.bodyWrapper.addEventListener('scroll', function() {
+        if (headerWrapper) headerWrapper.scrollLeft = this.scrollLeft // this.scrollLeft即bodyWrapper的scrollleft距离
+        const maxScrollLeftPosition = this.scrollWidth - this.offsetWidth - 1 // this.scrollWidth 滚动区域宽度 this.offsetWidth整个div的宽度 计算出可滚动的最大范围
+        const scrollLeft = this.scrollLeft
+        if (scrollLeft >= maxScrollLeftPosition) {
+          self.scrollPosition = 'right'
+        } else if (scrollLeft === 0) {
+          self.scrollPosition = 'left'
+        } else {
+          self.scrollPosition = 'middle'
+        }
+      })
+
       if (this.fit) {
         addResizeListener(this.$el, this.resizeListener)
       }
@@ -115,6 +171,9 @@ export default {
     doLayout () {
       this.layout.setHeight(this.height)
       this.layout.updateColumnsWidth()
+      if (this.shouldUpdateHeight) {
+        this.layout.updateElsHeight()
+      }
     }
   }
 }
@@ -123,12 +182,17 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
  .tableStyle {
-   overflow-y: auto;
    font-size: 14px;
-   margin: 0;
-   padding: 0
  }
- table {
-    border-spacing: none;
+ .el-table__empty-text {
+    width: 50%;
+    color: #909399;
+}
+ .el-table__empty-block {
+    min-height: 60px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
  }
 </style>

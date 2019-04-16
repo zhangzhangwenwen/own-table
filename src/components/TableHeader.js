@@ -1,4 +1,4 @@
-// import './TableHeader.css'
+
 import LayoutObserver from './layoutObserver'
 export default {
   name: 'TableHeader',

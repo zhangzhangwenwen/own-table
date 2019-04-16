@@ -1,5 +1,4 @@
 import ResizeObserver from 'resize-observer-polyfill'
-console.log(ResizeObserver)
 const isServer = typeof window === 'undefined'
 
 /* istanbul ignore next */

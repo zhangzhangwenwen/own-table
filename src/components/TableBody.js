@@ -10,7 +10,12 @@ export default {
   })
   const dataSource = this.$parent.dataSource
   return (
-      <table cellspacing="0" cellpadding="0" border="0">
+      <table 
+        cellspacing="0" 
+        cellpadding="0" 
+        border="0" 
+        class="own-table__body"
+        >
         <colgroup>
           {
             this._l(columns, column =>
@@ -18,9 +23,9 @@ export default {
             )
           }
         </colgroup>
+        <tbody>
         {
-          dataSource.length > 0 
-          ? this._l(dataSource, item =>
+          this._l(dataSource, item =>
             <tr>
               {
                 this._l(attributeObjectArr, option =>
@@ -28,20 +33,9 @@ export default {
                 )
               }
             </tr>
-          ) : <tr>{ this.$parent.emptyText }</tr>
-          // dataSource.length > 0
-          // // 数组的遍历以及数组下面对象的遍历
-          // ? this._l(dataSource, item =>
-          //   <tr on-click={() => this.clickTr(item)}
-          //     on-mouseover={() => this.handleHoverEvent(item)}>
-          //     {
-          //       this._l(options, option =>
-          //         <td>{item[option]}</td>
-          //       )
-          //     }
-          //   </tr>
-          // ) : <tr>{ this.$parent.emptyText }</tr>
+          )
         }
+        </tbody>
       </table>
     )
    },

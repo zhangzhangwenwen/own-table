@@ -18,18 +18,18 @@ export default {
     }
   },
   mounted () {
-    this.onColumnsChange(this.tableLayout);
-    this.onScrollableChange(this.tableLayout);
+    this.onColumnsChange(this.tableLayout)
+    this.onScrollableChange(this.tableLayout)
   },
   updated() {
     if (this.__updated__) return;
-    this.onColumnsChange(this.tableLayout);
-    this.onScrollableChange(this.tableLayout);
+    this.onColumnsChange(this.tableLayout)
+    this.onScrollableChange(this.tableLayout)
     this.__updated__ = true;
   },
 methods: {
     onColumnsChange() {
-      const cols = this.$el.querySelectorAll('colgroup > col');
+      const cols = this.$el.querySelectorAll('colgroup > col')
       if (!cols.length) return;
       const flattenColumns = this.tableLayout.getFlattenColumns();
       const columnsMap = {};
@@ -38,8 +38,8 @@ methods: {
       });
       for (let i = 0, j = cols.length; i < j; i++) {
         const col = cols[i];
-        const name = col.getAttribute('name');
-        const column = columnsMap[name];
+        const name = col.getAttribute('name')
+        const column = columnsMap[name]
         if (column) {
           col.setAttribute('width', column.realWidth || column.width);
         }
@@ -47,16 +47,16 @@ methods: {
       },
   
       onScrollableChange(layout) {
-        const cols = this.$el.querySelectorAll('colgroup > col[name=gutter]');
+        const cols = this.$el.querySelectorAll('colgroup > col[name=gutter]')
         for (let i = 0, j = cols.length; i < j; i++) {
-          const col = cols[i];
-          col.setAttribute('width', layout.scrollY ? layout.gutterWidth : '0');
+          const col = cols[i]
+          col.setAttribute('width', layout.scrollY ? layout.gutterWidth : '0')
         }
         const ths = this.$el.querySelectorAll('th.gutter');
         for (let i = 0, j = ths.length; i < j; i++) {
-          const th = ths[i];
-          th.style.width = layout.scrollY ? layout.gutterWidth + 'px' : '0';
-          th.style.display = layout.scrollY ? '' : 'none';
+          const th = ths[i]
+          th.style.width = layout.scrollY ? layout.gutterWidth + 'px' : '0'
+          th.style.display = layout.scrollY ? '' : 'none'
         }
       }
 }
