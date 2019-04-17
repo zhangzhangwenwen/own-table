@@ -6,23 +6,28 @@
       <table-header :style="{width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''}">
       </table-header>
     </div>
+    <!-- 父组件传过来的table-column的插槽 -->
+    <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
 
-    <slot></slot>
 
     <!-- 表格主体 -->
     <div  class="tableBody" ref="bodyWrapper" :style="[bodyHeight]">
-      <table-body :style="{ width: bodyWidth }">
+      <table-body 
+        :style="{ width: bodyWidth }"
+        :store="store"
+      >
       </table-body>
+      <!-- 空数据 -->
       <div v-if="!dataSource || dataSource.length === 0"
-          class="el-table__empty-block"
-          ref="emptyBlock"
-          :style="{
-            width: bodyWidth
-          }">
-          <span class="el-table__empty-text">
-            <slot name="empty">{{ emptyText || t('el.table.emptyText') }}</slot>
-          </span>
-        </div>
+        class="el-table__empty-block"
+        ref="emptyBlock"
+        :style="{
+          width: bodyWidth
+        }">
+        <span class="el-table__empty-text">
+          <slot name="empty">{{ emptyText || t('el.table.emptyText') }}</slot>
+        </span>
+      </div>
     </div>
 
   </div>
@@ -37,11 +42,34 @@ import TableHeader from './TableHeader'
 import TableColumn from './TableColumn'
 import TableBody from './TableBody'
 import { addResizeListener, removeResizeListener } from './utils/resize-event'
+
+const flattenData = function(data) {
+  if (!data) return data;
+  let newData = [];
+  const flatten = arr => {
+    arr.forEach((item) => {
+      newData.push(item);
+      if (Array.isArray(item.children)) {
+        flatten(item.children)
+      }
+    });
+  };
+  flatten(data);
+  if (data.length === newData.length) {
+    return data
+  } else {
+    return newData
+  }
+}
+
 export default {
   name: 'OwnTable',
   props: {
     dataSource: {
-      required: true
+      type: Array,
+      default: function() {
+        return [];
+      }
     },
     emptyText: {
       default: '没有数据'
@@ -54,8 +82,17 @@ export default {
     maxHeight: [String, Number]
   },
   watch: {
-    dataSource (oldVal, val) {
-      this.dataSource = val
+    dataSource: {
+      immediate: true,
+      handler(value) {
+        value = flattenData(value)
+        this.store.commit('setData', value)
+        if (this.$ready) {
+        this.$nextTick(() => {
+          this.doLayout()
+        })
+       }
+      }
     },
     height: {
       immediate: true,
