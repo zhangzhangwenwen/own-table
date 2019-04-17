@@ -8,21 +8,11 @@ export default {
     }
   },
   render(h) {
-    const columns = this.$parent.store.states.columns
-    let attributeObjectArr = []
-    columns.map(function (column) {
-      attributeObjectArr.push({align: column['align'], prop: column['prop']})
-  })
+  const columns = this.$parent.store.states.columns
   // const columnsHidden = this.columns.map((column, index) => this.isColumnHidden(index))
-  // const dataSource = this.$parent.dataSource
   const rows = this.data
   return (
-      <table 
-        cellspacing="0" 
-        cellpadding="0" 
-        border="0" 
-        class="own-table__body"
-        >
+      <table cellspacing="0" cellpadding="0" border="0" class="own-table__body">
         <colgroup>
           {
             this._l(columns, column =>
@@ -33,7 +23,11 @@ export default {
         <tbody>
         {
           this._l(rows, (row, $index) => {
-            const tr = (<tr>
+            const rowClasses = this.getRowClass(row, $index);
+            const tr = (
+              <tr
+                class={ rowClasses }
+              >
               {
                 this._l(this.columns, (column, cellIndex) => {
                   const data = {
@@ -77,7 +71,21 @@ export default {
         } else {
           return (index < this.leftFixedLeafCount) || (index >= this.columnsCount - this.rightFixedLeafCount);
         }
-      }  
+      },
+      // 行样式
+      getRowClass(row, rowIndex) {
+        const classes = []
+        const rowClassName = this.table.rowClassName
+        if (typeof rowClassName === 'string') {
+          classes.push(rowClassName);
+        } else if (typeof rowClassName === 'function') {
+          classes.push(rowClassName.call(null, {
+            row,
+            rowIndex
+          }))
+        }
+        return classes
+      }
    },
    mounted () {
    },

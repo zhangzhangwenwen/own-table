@@ -17,7 +17,7 @@ const getDefaultColumns = function (options) {
 
 const DEFAULT_RENDER_CELL = function(h, { row, column, $index }) {
   const property = column.property // 类似于name、age
-  const value = property && getPropByPath(row, property).v
+  const value = property && getPropByPath(row, property).v // getPropByPath 取出属性对应的属性值 {'name': '张三'} 返回值为张三
   if (column && column.formatter) {
     return column.formatter(row, column, value, $index);
   }
@@ -55,7 +55,8 @@ export default {
     minWidth: String,
     align: String,
     headerAlign: String,
-    sortable: Boolean
+    sortable: Boolean,
+    rowClassName: String
   },
   render () {
   },
@@ -99,8 +100,7 @@ export default {
       const children = [
         _self.renderTreeCell(data),
         renderCell(h, data)
-      ];
-
+      ]
       return (<div class="cell"> { children }</div>)
     }
   },

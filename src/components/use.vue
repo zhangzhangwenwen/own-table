@@ -1,6 +1,6 @@
 <template>
     <div class="use-wrapper">
-        <OwnTable emptyText="没有数据" :dataSource="dataSource" :max-height="300">
+        <OwnTable emptyText="没有数据" :dataSource="dataSource" :max-height="300" :row-class-name="rowClassName">
             <table-column prop="name" label="名字" min-width="200" align="center"></table-column>
             <table-column prop="sex" label="性别" width="100" align="center"></table-column>
             <table-column prop="age" label="年龄" align="center"></table-column>
@@ -48,6 +48,11 @@ export default {
   components: {
     OwnTable,
     TableColumn
+  },
+  methods: {
+    rowClassName (row, rowIndex) {
+        return 'hhahahaha'
+    }
   }
 }
 </script>

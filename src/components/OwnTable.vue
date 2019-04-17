@@ -15,6 +15,7 @@
       <table-body 
         :style="{ width: bodyWidth }"
         :store="store"
+        :row-class-name="rowClassName"
       >
       </table-body>
       <!-- 空数据 -->
@@ -65,6 +66,7 @@ const flattenData = function(data) {
 export default {
   name: 'OwnTable',
   props: {
+    rowClassName: [String, Function],
     dataSource: {
       type: Array,
       default: function() {
