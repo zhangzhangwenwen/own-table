@@ -3,7 +3,7 @@
 
     <!-- 表格头部 -->
     <div class="tableHeader" ref="headerWrapper">
-      <table-header :style="{width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''}">
+      <table-header  :store="store" :style="{width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''}">
       </table-header>
     </div>
     <!-- 父组件传过来的table-column的插槽 -->

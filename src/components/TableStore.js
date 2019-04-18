@@ -1,4 +1,29 @@
 import Vue from 'vue'
+import debounce from './utils/debounce';
+const toggleRowSelection = function(states, row, selected) {
+  let changed = false
+  const selection = states.selection
+  const index = selection.indexOf(row)
+  if (typeof selected === 'undefined') {
+    if (index === -1) {
+      selection.push(row)
+      changed = true
+    } else {
+      selection.splice(index, 1)
+      changed = true
+    }
+  } else {
+    if (selected && index === -1) {
+      selection.push(row)
+      changed = true
+    } else if (!selected && index > -1) {
+      selection.splice(index, 1);
+      changed = true
+    }
+  }
+  return changed
+}
+
 const TableStore = function (table, initialState) {
   if (!table) {
     throw new Error('Table is required')
@@ -6,10 +31,54 @@ const TableStore = function (table, initialState) {
   this.table = table
   this.states = {
     columns: [],
-    data: null
+    data: null,
+    selection: [],
+    selectable: null,
+    isAllSelected: false // 表格中设定了type=selection的时候表头是否选择
   }
+  // 点击事件
+  this._toggleAllSelection = debounce(10, function(states) {
+    const data = states.data || []
+    if (data.length === 0) return
+    const selection = this.states.selection
+    // when only some rows are selected (but not all), select or deselect all of them
+    // depending on the value of selectOnIndeterminate
+    const value = !states.isAllSelected // 如果点击表头的时候isAllSelected为true 就取消所有选择
+    let selectionChanged = false
+    data.forEach((item, index) => {
+      if (states.selectable) {
+        if (states.selectable.call(null, item, index) && toggleRowSelection(states, item, value)) {
+          selectionChanged = true
+        }
+      } else {
+        if (toggleRowSelection(states, item, value)) {
+          selectionChanged = true
+        }
+      }
+    });
+    const table = this.table
+    if (selectionChanged) {
+      table.$emit('selection-change', selection ? selection.slice() : [])
+    }
+    table.$emit('select-all', selection)
+    states.isAllSelected = value
+  })
 }
 TableStore.prototype.mutations = {
+  rowSelectedChanged(states, row) {
+    const changed = toggleRowSelection(states, row)
+    const selection = states.selection
+    if (changed) {
+      const table = this.table;
+      // table.$emit('selection-change', selection ? selection.slice() : []);
+      // table.$emit('select', selection, row);
+    }
+
+    // this.updateAllSelected();
+  },
+  toggleAllSelection(state) {
+    this._toggleAllSelection(state)
+  },
   setData(states, data) {
     // Object.keys(states.filters).forEach((columnId) => {
     //   const values = states.filters[columnId];
@@ -100,5 +169,8 @@ TableStore.prototype.commit = function (name, ...args) {
   } else {
     throw new Error(`Action not found: ${name}`);
   }
+}
+TableStore.prototype.isSelected = function(row) {
+  return (this.states.selection || []).indexOf(row) > -1
 }
 export default TableStore

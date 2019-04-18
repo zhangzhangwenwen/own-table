@@ -45,9 +45,46 @@ const parseMinWidth = (minWidth) => {
 }
 
 let columnIdSeed = 1
+
+// 选项
+const defaults = {
+  default: {
+    order: ''
+  },
+  selection: {
+    width: 48,
+    minWidth: 48,
+    realWidth: 48,
+    order: '',
+    className: 'own-table-column--selection'
+  }
+}
+// 几种不同的渲染函数 type=selection
+const forced = {
+  selection: {
+    renderHeader: function(h, { store }) {
+      return <input type="checkbox"    //  当这里的标签渲染到tableHeaer组件里面时  this指向的是tableHeader组件
+        disabled={ store.states.data && store.states.data.length === 0 }
+        value={ this.isAllSelected } 
+        onClick={ this.toggleAllSelection}/>
+    },
+    renderCell: function(h, { row, column, store, $index }) {
+      return <input 
+      type="checkbox" 
+      value={ store.isSelected(row) }
+      onInput={ () => { store.commit('rowSelectedChanged', row)} }/>
+    },
+    sortable: false,
+    resizable: false
+  }
+};
 export default {
   name: 'TableColumn',
   props: {
+    type: {
+      type: String,
+      default: 'default'
+    },
     property: String, // 父级传过来的属性值
     prop: String,
     label: String,
@@ -73,23 +110,42 @@ export default {
     const minWidth = parseMinWidth(this.minWidth)
     let parent = this.columnOrTableParent
     this.columnId = '_column_' + columnIdSeed++
-    
+    let type = this.type
     const option = getDefaultColumns({
       id: this.columnId,
       // prop: this.prop,
       label: this.label,
       minWidth,
       width,
+      type,
       property: this.prop || this.property,
       renderCell: null,
       sortable: this.sortable || false,
       align: this.align ? 'is-' + this.align : null,
       headerAlign: this.headerAlign ? 'is-' + this.headerAlign : (this.align ? 'is-' + this.align : null)
     })
+
+    let source = forced[type] || {} // 找到对应的渲染函数
+
+    Object.keys(source).forEach((prop) => {
+      let value = source[prop]
+      if (value !== undefined) {
+        if (prop === 'renderHeader') {
+          if (type === 'selection' && option[prop]) {
+            console.warn('[Element Warn][TableColumn]Selection column doesn\'t allow to set render-header function.');
+          } else {
+            value = option[prop] || value
+          }
+        }
+        option[prop] = prop === 'className' ? `${column[prop]} ${value}` : value;
+      }
+    })
+
     this.columnConfig = option // 传入参数
     let renderCell = option.renderCell
     let _self = this
-    option.renderCell = function(h, data) {
+
+    option.renderCell = function(h, data) { // 渲染函数
       if (_self.$scopedSlots.default) {
         renderCell = () => _self.$scopedSlots.default(data);
       }

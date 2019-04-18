@@ -15,7 +15,6 @@ export default {
   margin: 0;
   padding: 0;
 }
-
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
