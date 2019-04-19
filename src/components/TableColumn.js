@@ -66,12 +66,15 @@ const forced = {
       return <input type="checkbox"    //  当这里的标签渲染到tableHeaer组件里面时  this指向的是tableHeader组件
         disabled={ store.states.data && store.states.data.length === 0 }
         value={ this.isAllSelected } 
+        checked = {this.isAllSelected}
         onClick={ this.toggleAllSelection}/>
     },
     renderCell: function(h, { row, column, store, $index }) {
       return <input 
-      type="checkbox" 
+      type="checkbox"
+      onClick={ (event) => event.stopPropagation() } 
       value={ store.isSelected(row) }
+      checked = {store.isSelected(row)}
       onInput={ () => { store.commit('rowSelectedChanged', row)} }/>
     },
     sortable: false,

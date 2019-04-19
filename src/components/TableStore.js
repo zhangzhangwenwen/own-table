@@ -33,7 +33,7 @@ const TableStore = function (table, initialState) {
     columns: [],
     data: null,
     selection: [],
-    selectable: null,
+    selectable: true,
     isAllSelected: false // 表格中设定了type=selection的时候表头是否选择
   }
   // 点击事件
@@ -47,10 +47,6 @@ const TableStore = function (table, initialState) {
     let selectionChanged = false
     data.forEach((item, index) => {
       if (states.selectable) {
-        if (states.selectable.call(null, item, index) && toggleRowSelection(states, item, value)) {
-          selectionChanged = true
-        }
-      } else {
         if (toggleRowSelection(states, item, value)) {
           selectionChanged = true
         }
@@ -64,17 +60,32 @@ const TableStore = function (table, initialState) {
     states.isAllSelected = value
   })
 }
+TableStore.prototype.updateAllSelected = function () {
+   const states = this.states;
+   const { selection, rowKey, selectable, data } = states;
+   if (!data || data.length === 0) {
+     states.isAllSelected = false
+     return
+   }
+   if (selection.length === data.length) {
+     states.isAllSelected = true
+   } else {
+    states.isAllSelected = false
+   }
+}
+
 TableStore.prototype.mutations = {
+  // 表格主体的checkedBox的点击事件
   rowSelectedChanged(states, row) {
     const changed = toggleRowSelection(states, row)
     const selection = states.selection
     if (changed) {
       const table = this.table;
-      // table.$emit('selection-change', selection ? selection.slice() : []);
-      // table.$emit('select', selection, row);
+      table.$emit('selection-change', selection ? selection.slice() : []);
+      table.$emit('select', selection, row);
     }
 
-    // this.updateAllSelected();
+    this.updateAllSelected()
   },
   toggleAllSelection(state) {
     this._toggleAllSelection(state)

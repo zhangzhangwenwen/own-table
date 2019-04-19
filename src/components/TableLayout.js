@@ -12,7 +12,7 @@ class TableLayout {
     this.scrollX = false // 暂时默认无横向滚动条
     this.height = null // 表格高度
     this.tableHeight = null
-    this.headerHeight = 20 // Table Header Height
+    this.headerHeight = 44 // Table Header Height
     this.bodyHeight = null // Table Height - Table Header Height
     this.gutterWidth = scrollbarWidth()
 
@@ -70,16 +70,18 @@ class TableLayout {
     const { headerWrapper } = this.table.$refs
     // this.appendHeight = appendWrapper ? appendWrapper.offsetHeight : 0;
 
+    if (this.showHeader && !headerWrapper) return
     const headerHeight = this.headerHeight = !this.showHeader ? 0 : headerWrapper.offsetHeight
     if (this.showHeader && headerWrapper.offsetWidth > 0 && (this.table.columns || []).length > 0 && headerHeight < 2) {
       return Vue.nextTick(() => this.updateElsHeight());
     }
+    console.log(this.table.$el.clientHeight)
     const tableHeight = this.tableHeight = this.table.$el.clientHeight
     if (this.height !== null && (!isNaN(this.height) || typeof this.height === 'string')) {
       // const footerHeight = this.footerHeight = footerWrapper ? footerWrapper.offsetHeight : 0;
       // this.bodyHeight = tableHeight - headerHeight - footerHeight + (footerWrapper ? 1 : 0)
       
-      this.bodyHeight = tableHeight - headerHeight // 表格body的高度是整个table的高度减去表头的高度
+      this.bodyHeight = tableHeight - headerHeight // 表格body的高度是整个table的高度减去表头的高度 300 - 20 = 280
     }
     // this.fixedBodyHeight = this.scrollX ? this.bodyHeight - this.gutterWidth : this.bodyHeight;
 
