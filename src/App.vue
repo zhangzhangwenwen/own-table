@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'Appp'
+  name: 'Appzheshiapp萨达大厦大厦大厦'
 }
 </script>
 
