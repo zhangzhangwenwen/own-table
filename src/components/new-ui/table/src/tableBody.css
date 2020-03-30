@@ -1,0 +1,17 @@
+.tableBody {
+   overflow-x: auto;
+    overflow-y: auto;
+    width: 100%;
+}
+.tableBody tr td{
+  box-sizing: border-box;
+  border-right: 1px #ebeef5 solid;
+  border-bottom: 1px #ebeef5 solid;
+}
+.tableBody table {
+  border-collapse:separate;
+  table-layout: fixed;
+}
+.is-center {
+  text-align: center;
+}

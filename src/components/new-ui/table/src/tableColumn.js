@@ -1,3 +1,5 @@
+
+import { getPropByPath } from './utils/util';
 // 获取table数据并对宽度做相关处理
 const getDefaultColumns = function (options) {
     const column = {}
@@ -59,6 +61,16 @@ const forced = {
         resizable: false
     }
 };
+
+
+const DEFAULT_RENDER_CELL = function (h, { row, column, $index }) {
+    const property = column.property // 类似于name、age
+    const value = property && getPropByPath(row, property).v // getPropByPath 取出属性对应的属性值 {'name': '张三'} 返回值为张三
+    if (column && column.formatter) {
+        return column.formatter(row, column, value, $index);
+    }
+    return value;
+}
 
 let columnIdSeed = 1
 
@@ -132,8 +144,31 @@ export default {
         })
 
         this.columnConfig = column;
+
+        let renderCell = column.renderCell
+        let _self = this
+
+        column.renderCell = function (h, data) { // 渲染函数
+            if (_self.$scopedSlots.default) { // 先判断有没有<template slot-scope="scope"></template>这个模版
+                renderCell = () => _self.$scopedSlots.default(data);
+            }
+
+            if (!renderCell) { // 如果没有模版则使用默认的渲染函数
+                renderCell = DEFAULT_RENDER_CELL
+            }
+            const children = [
+                _self.renderTreeCell(data),
+                renderCell(h, data)
+            ]
+            return (<div class="cell"> {children}</div>)
+        }
     },
-    mounted () {
+    methods: {
+        renderTreeCell(data) {
+            return null
+        }
+    },
+    mounted() {
         this.store.states.columns.push(this.columnConfig)
     }
 }

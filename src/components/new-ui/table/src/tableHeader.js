@@ -1,5 +1,9 @@
+import LayoutObserver from './layoutObserver';
+
+
 export default {
     name: 'TableHeader',
+    mixins: [LayoutObserver],
     render() {
         const columns = this.$parent.store.states.columns
         return (
@@ -37,5 +41,10 @@ export default {
                 </thead>
             </table>
         )
+    },
+    computed: {
+        table() {
+            return this.$parent;
+        }
     }
 }
