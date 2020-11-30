@@ -3,7 +3,7 @@
         <OwnTable 
            emptyText="没有数据" 
            :dataSource="dataSource" 
-           :max-height="300"
+           :max-height="200"
            :row-class-name="rowClassName"
            @selection-change="handleSelectionChange"
            @select="handleSelect"
@@ -46,7 +46,7 @@ export default {
         {'name': '张三', 'sex': '男', 'age': '18', 'fat': '20', 'getou': '182'},
         {'name': '张三', 'sex': '男', 'age': '18', 'fat': '20', 'getou': '182'},
         {'name': '张三', 'sex': '男', 'age': '18', 'fat': '20', 'getou': '182'},
-        {'name': '张三', 'sex': '男', 'age': '18', 'fat': '20', 'getou': '182'}
+        // {'name': '张三', 'sex': '男', 'age': '18', 'fat': '20', 'getou': '182'}
       ]
     }
   },

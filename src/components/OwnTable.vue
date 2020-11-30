@@ -123,7 +123,7 @@ export default {
           }
         } else if (this.maxHeight) {
            return {
-            'max-height': (this.maxHeight - this.layout.headerHeight) + 'px'
+            'max-height': (this.maxHeight - this.layout.headerHeight + (this.layout.scrollX ? this.layout.gutterWidth : 0)) + 'px'
           }
         }
         return {}
